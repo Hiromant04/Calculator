@@ -78,6 +78,7 @@ public class Calculator {
             }
             // вдруг римское!?
             if (rome.contains(parts[0]) && rome.contains(parts[1])) {
+                isRome = true;
                 left = Integer.parseInt(arab.get(rome.indexOf(parts[0])));        // тут мы вытаскиваем из массива arab элемент, индекс
                 // которого равен индексу элемента в массиве
                 // rome(элемент которого равен тому, что мы ввели в консоли)
