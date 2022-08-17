@@ -29,11 +29,24 @@ public class Calculator {
         boolean isRome = false;
 
         try {
+            List<String> operations = new ArrayList(Arrays.asList("+", "-", "/", "*"));
+            int j = 0;
+            char[] charArray = input.toCharArray();
+            for (int i = 0; i < operations.size(); i++) {
+                for (char item : charArray) {
+                    if (String.valueOf(item).equals(operations.get(i))) {
+                        j++;
+                    }
+                }
+            }
+            if (j > 1){
+                throw new IllegalArgumentException("Может использоваться только один математический оператор");
+            }
             // 1. проверим, что в строке есть оператор и запомним его, чтобы во 2м действии поделить строку на части
             // "до" оператора и "после" оператора
             String action = "";
-            List<String> operations = new ArrayList(Arrays.asList("+", "-", "/", "*"));
-            int j = 0;
+
+            j = 0;
             for (int i = 0; i < operations.size(); i++) {
                 if (input.contains(operations.get(i))) {
                     action = operations.get(i);                 // сохраняем оператор в переменную
@@ -51,26 +64,35 @@ public class Calculator {
             // то, что "после" оператора, лежит с индексом 1
             // теперь надо проверить, что левая и правая части - числа, учитывая, что могут быть римские цифры
             // сначала проверим, арабское ли!?
+
+            if ((!rome.contains(parts[0]) || !rome.contains(parts[1])) &&
+                    (!arab.contains(parts[0]) || !arab.contains(parts[1])
+                    )) {
+                throw new IllegalArgumentException("Вне диапазона");
+            }
+
             if (arab.contains(parts[0]) && arab.contains(parts[1])) {
                 left = Integer.parseInt(parts[0]);               // Integer.parseInt() - метод самой джавы, который преобразует строку в число
                 right = Integer.parseInt(parts[1]);
+
             }
             // вдруг римское!?
             if (rome.contains(parts[0]) && rome.contains(parts[1])) {
-                isRome = true;
                 left = Integer.parseInt(arab.get(rome.indexOf(parts[0])));        // тут мы вытаскиваем из массива arab элемент, индекс
                 // которого равен индексу элемента в массиве
                 // rome(элемент которого равен тому, что мы ввели в консоли)
                 right = Integer.parseInt(arab.get(rome.indexOf(parts[1])));
 
-                if (left < right && action.equals("-")){
-                    throw new IllegalArgumentException("Римские цифры не могут быть отрицательными");   // тут кидаем исключение.
+                if (left <= right && action.equals("-")){
+                    throw new IllegalArgumentException("Результат вычитания при использовании римских цифр не может " +
+                            "быть отрицательным или равным нулю");   // тут кидаем исключение.
                 }
             }
             // а если у нас часть римская, а часть арабская, то кидаем ошибку
             if (arab.contains(parts[0]) && rome.contains(parts[1]) ||
                     rome.contains(parts[0]) && arab.contains(parts[1])) {
-                throw new IllegalArgumentException("Не должно быть действия над арабскими и римскими числами в одном действии");
+                throw new IllegalArgumentException("Не должно быть действия над арабскими и римскими числами " +
+                        "в одном действии");
             }
 
             // а теперь сами действия
