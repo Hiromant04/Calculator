@@ -117,9 +117,17 @@ public class Calculator {
                     return rome.get(arab.indexOf(String.valueOf(result)));
                 }
                 else {
-                    int a = result - 10;
-                    int b = 10;
-                    return rome.get(arab.indexOf(String.valueOf(b))).concat(rome.get(arab.indexOf(String.valueOf(a))));
+                    int count = result / 10;
+                    int ostatok = result - count * 10;
+                    int dec = 10;
+                    String temp = "";
+                    for (int i = 0; i < count; i++){
+                        temp = temp.concat(rome.get(arab.indexOf(String.valueOf(dec))));
+                    }
+                    if (ostatok == 0) {
+                        return temp;
+                    }
+                    return temp.concat(rome.get(arab.indexOf(String.valueOf(ostatok))));
                 }
             }
             return String.valueOf(result);                  // возвращаем результат, преобразовав его в строку
